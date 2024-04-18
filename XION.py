@@ -3,7 +3,7 @@ import zipfile
 import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-import pyautogui as pg
+from selenium.webdriver.support import expected_conditions as EC
 
 # 193.124.226.189:64895:4k9BYdsF:M3m7qdqa
 # 136.0.191.42:62933:4k9BYdsF:M3m7qdqa
@@ -92,12 +92,9 @@ def get_chromedriver(use_proxy=False, user_agent=None):
     return driver
 
 
-def registration():
-    driver = get_chromedriver(use_proxy=False, user_agent='Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36')
-    
+def registration(driver):    
     driver.get('https://xion.bonusblock.io/explore')
     time.sleep(2)
-    main_window_handle = driver.current_window_handle
     
     driver.find_element(By.XPATH, "//div[. = ' CONNECT ']").click()
     time.sleep(2)
@@ -105,6 +102,7 @@ def registration():
     driver.find_element(By.TAG_NAME, "input").send_keys("gcbklgsd@tenermail.com")
     time.sleep(2)
     driver.find_element(By.XPATH, "//button[. = 'Log in / Sign up']").click()
+    main_window_handle = driver.current_window_handle
     time.sleep(2)
     
     driver.switch_to.new_window()
@@ -132,9 +130,79 @@ def registration():
     driver.find_element(By.TAG_NAME, "svg").click()
     time.sleep(2)
     driver.find_element(By.XPATH, "//button[. = 'Allow and Continue']").click()
-
-    time.sleep(200)
-
+    time.sleep(60)
+    
+def complete_first_task(driver):
+    driver.get('https://testnet.staking.burnt.com/')
+    time.sleep(5)
+    
+    driver.find_elements(By.TAG_NAME, "button")[1].click()
+    time.sleep(5)
+    driver.find_element(By.TAG_NAME, "input").send_keys("josecarter1960@floriamail.com")
+    time.sleep(2)
+    driver.find_element(By.XPATH, "//button[. = 'Log in / Sign up']").click()
+    main_window_handle = driver.current_window_handle
+    time.sleep(2)
+    
+    driver.switch_to.new_window()
+    
+    driver.get("https://firstmail.ltd/webmail/login")
+    time.sleep(2)
+    driver.find_element(By.ID, "email").send_keys("josecarter1960@floriamail.com")
+    driver.find_element(By.ID, "password").send_keys("pflilrlpX2566")
+    driver.find_element(By.XPATH, "//button[. = 'Войти']").click()
+    time.sleep(10)
+    driver.find_elements(By.CLASS_NAME, "email-list-item")[0].click()
+    time.sleep(2)
+    
+    frame = driver.find_element(By.TAG_NAME, "iframe")
+    driver.switch_to.frame(frame)
+    verification_code = driver.find_element(By.TAG_NAME, "p").text[0:6]
+    
+    driver.close()
+    driver.switch_to.window(main_window_handle)
+    time.sleep(5)
+    
+    driver.find_element(By.TAG_NAME, "input").send_keys(verification_code)
+    driver.find_element(By.XPATH, "//button[. = 'Confirm']").click()
+    time.sleep(10)
+    driver.find_element(By.TAG_NAME, "svg").click()
+    time.sleep(2)
+    driver.find_element(By.XPATH, "//button[. = 'Allow and Continue']").click()
+    time.sleep(30)
+    
+    driver.find_element(By.XPATH, "//button[. = 'Faucet 1 XION']").click()
+    time.sleep(10)
+    for i in range(2):
+        driver.find_elements(By.XPATH, "//button[. = 'Delegate']")[0].click()
+        time.sleep(2)
+        driver.find_elements(By.TAG_NAME, "input")[1].send_keys("0.5")
+        time.sleep(5)
+        driver.find_element(By.XPATH, "//button[. = 'DELEGATE NOW']").click()
+        time.sleep(2)
+        driver.find_element(By.XPATH, "//button[. = 'CONFIRM']").click()
+        time.sleep(20)
+        driver.find_element(By.XPATH, "//button[. = 'CLOSE']").click()
+        time.sleep(10)
+    
+    driver.find_element(By.XPATH, "//button[. = 'Faucet 1 XION']").click()
+    time.sleep(10)
+    driver.find_elements(By.XPATH, "//button[. = 'Delegate']")[0].click()
+    time.sleep(2)
+    driver.find_element(By.TAG_NAME, "input").send_keys("0.5")
+    time.sleep(1)
+    driver.find_element(By.XPATH, "//button[. = 'DELEGATE NOW']").click()
+    time.sleep(2)
+    driver.find_element(By.XPATH, "//button[. = 'CONFIRM']").click()
+    time.sleep(20)
+    driver.find_element(By.XPATH, "//button[. = 'CLOSE']").click()
+    time.sleep(10)
+    
+    time.sleep(500)
+    
 
 if __name__ == '__main__':
-    registration()
+    
+    driver = get_chromedriver()
+    
+    complete_first_task(driver=driver)
